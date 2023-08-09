@@ -15,6 +15,6 @@ int main()
 {
 //        Logger log("leetcode.log");
     Logger log;
-    log << "Hello World!" << " Ololo";
+    log << "Hello World!" << " Ololo" << ", Mgzavrebe!";
     return 0;
 }

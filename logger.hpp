@@ -4,13 +4,28 @@
 #include <fstream>
 #include <string>
 
-class LogTrail;
+class Logger;
 
 class Logger {
-protected:
-public:
     std::ostream *m_outputPtr;
+    class LogTrail {
+        typedef int count_t;
+    protected:
+        Logger* m_loggerPtr;
+        count_t* m_counterPtr;
+    public:
+        LogTrail(Logger*);
+        LogTrail(LogTrail&);
+        LogTrail(LogTrail&&);
+        ~LogTrail();
 
+        template<typename T>
+        LogTrail& operator<<(const T& value) {
+
+            (*m_loggerPtr->m_outputPtr) << value;
+            return *this;
+        }
+    };
 public:
     Logger();
     Logger(const std::string& filepath);
@@ -18,12 +33,14 @@ public:
     ~Logger();
 
     template<typename T>
-    Logger& operator<<(const T& value) {
+    LogTrail operator<<(const T& value) {
 
         (*m_outputPtr) << value;
-        return *this;
+        LogTrail logTrail(this);
+        return logTrail;
     }
 };
+
 
 #if 0
 template<typename T>
