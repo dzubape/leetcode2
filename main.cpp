@@ -11,10 +11,21 @@ public:
     }
 };
 
+class Prop {
+public:
+    Prop() {
+
+    }
+};
+
+Logger LOG("leetcode.log");
+
 int main()
 {
 //        Logger log("leetcode.log");
-    Logger log;
-    log << "Hello World!" << " Ololo" << ", Mgzavrebe!";
+    LOG << " {one}" << " {two}" << " {three}";
+    LOG << " {four}" << " {five}" << " {six}";
+    const int &rx = 12;
+    LOG << "rx: " << &rx;
     return 0;
 }

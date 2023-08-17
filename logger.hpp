@@ -3,6 +3,7 @@
 
 #include <fstream>
 #include <string>
+#include <iostream>
 
 class Logger;
 
@@ -13,7 +14,9 @@ class Logger {
     protected:
         Logger* m_loggerPtr;
         count_t* m_counterPtr;
+        int m_value;
     public:
+        LogTrail() = delete;
         LogTrail(Logger*);
         LogTrail(LogTrail&);
         LogTrail(LogTrail&&);
@@ -36,19 +39,8 @@ public:
     LogTrail operator<<(const T& value) {
 
         (*m_outputPtr) << value;
-        LogTrail logTrail(this);
-        return logTrail;
+        return LogTrail(this);
     }
 };
-
-
-#if 0
-template<typename T>
-Logger& operator<<(Logger& log, const T& value) {
-
-    (*log.m_outputPtr) << value;
-    return log;
-}
-#endif
 
 #endif // LOGGER_HPP

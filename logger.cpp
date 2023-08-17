@@ -2,11 +2,15 @@
 
 #include <iostream>
 
+#define _LOG() std::cout
+#define ENDL std::endl
 
+#define LOG() globalLog
 
+#define DEFAULT_OUTPUT std::cerr
 Logger::Logger() {
 
-    m_outputPtr = &std::cout;
+    m_outputPtr = &DEFAULT_OUTPUT;
 }
 
 Logger::Logger(const std::string &filepath) {
@@ -16,8 +20,7 @@ Logger::Logger(const std::string &filepath) {
 
 Logger::~Logger() {
 
-    if(m_outputPtr != &std::cout) {
-
+    if(m_outputPtr != &DEFAULT_OUTPUT) {
 
         delete m_outputPtr;
     }
@@ -27,7 +30,7 @@ Logger::LogTrail::LogTrail(Logger *logger)
     : m_loggerPtr(logger)
     , m_counterPtr(new count_t(1))
 {
-//    std::cout << "LogTrail(Logger *) counter: " << *m_counterPtr << std::endl;
+    _LOG() << "LogTrail(Logger *) counter: " << *m_counterPtr << ENDL;
 }
 
 Logger::LogTrail::LogTrail(LogTrail &other)
@@ -35,22 +38,21 @@ Logger::LogTrail::LogTrail(LogTrail &other)
     , m_counterPtr(other.m_counterPtr)
 {
     ++*m_counterPtr;
-//    std::cout << "LogTrail(LogTrail &) counter: " << *m_counterPtr << std::endl;
+    _LOG() << "LogTrail(LogTrail &) counter: " << *m_counterPtr << ENDL;
 }
-
 
 Logger::LogTrail::LogTrail(LogTrail &&other)
     : m_loggerPtr(other.m_loggerPtr)
     , m_counterPtr(other.m_counterPtr)
 {
 //    ++*m_counterPtr;
-//    std::cout << "LogTrail(LogTrail &) counter: " << *m_counterPtr << std::endl;
+    _LOG() << "LogTrail(LogTrail &&) counter: " << *m_counterPtr << ENDL;
 }
 
 Logger::LogTrail::~LogTrail() {
 
     --*m_counterPtr;
-//    std::cout << "~LogTrail() counter: " << *m_counterPtr << std::endl;
+    _LOG() << "~LogTrail() counter: " << *m_counterPtr << ENDL;
 
     if(!*m_counterPtr) {
 
