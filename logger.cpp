@@ -2,8 +2,15 @@
 
 #include <iostream>
 
-#define _LOG() std::cout
-#define ENDL std::endl
+class DeadLog {
+public:
+    template<typename T>
+    DeadLog& operator<<(const T&) {return *this;}
+};
+
+DeadLog deadLog;
+#define _LOG() deadLog
+#define ENDL "\n"
 
 #define LOG() globalLog
 
@@ -13,10 +20,10 @@ Logger::Logger() {
     m_outputPtr = &DEFAULT_OUTPUT;
 }
 
-Logger::Logger(const std::string &filepath) {
-
-    m_outputPtr = new std::ofstream(filepath, std::ofstream::app);
-}
+Logger::Logger(const std::string &filepath, std::ostream *stdOutput)
+    : m_outputPtr(new std::ofstream(filepath, std::ofstream::app)),
+      m_stdOutputPtr(stdOutput)
+{}
 
 Logger::~Logger() {
 
@@ -58,6 +65,7 @@ Logger::LogTrail::~LogTrail() {
 
         delete m_counterPtr;
         (*m_loggerPtr->m_outputPtr) << "\n";
+        if(m_loggerPtr->m_stdOutputPtr)
+            (*m_loggerPtr->m_stdOutputPtr) << "\n";
     }
-
 }

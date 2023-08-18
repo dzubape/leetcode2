@@ -9,6 +9,8 @@ class Logger;
 
 class Logger {
     std::ostream *m_outputPtr;
+    std::ostream *m_stdOutputPtr;
+
     class LogTrail {
         typedef int count_t;
     protected:
@@ -26,12 +28,14 @@ class Logger {
         LogTrail& operator<<(const T& value) {
 
             (*m_loggerPtr->m_outputPtr) << value;
+            if(m_loggerPtr->m_stdOutputPtr)
+                (*m_loggerPtr->m_stdOutputPtr) << value;
             return *this;
         }
     };
 public:
     Logger();
-    Logger(const std::string& filepath);
+    Logger(const std::string& filepath, std::ostream* = nullptr);
 
     ~Logger();
 
@@ -39,6 +43,8 @@ public:
     LogTrail operator<<(const T& value) {
 
         (*m_outputPtr) << value;
+        if(m_stdOutputPtr)
+            (*m_stdOutputPtr) << value;
         return LogTrail(this);
     }
 };
