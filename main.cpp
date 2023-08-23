@@ -27,37 +27,34 @@ public:
         if(divisor == dividend)
             return 1;
 
-        if(abs(int64_t(divisor)) > abs(int64_t(dividend)))
+#define ABS(VALUE) (VALUE < 0 ? -VALUE : VALUE)
+
+        if(ABS(int64_t(divisor)) > ABS(int64_t(dividend)))
             return 0;
 
         bool minus = (dividend < 0) != (divisor < 0);
 
-        if(abs(int64_t(divisor)) == abs(int64_t(dividend)))
+        if(ABS(int64_t(divisor)) == ABS(int64_t(dividend)))
             return minus ? -1 : 1;
 
-        int _dividend, appendix;
+        int appendix=0;
 
         if(dividend < 0) {
 
             appendix = 1;
-            _dividend = -(dividend + appendix);
-        }
-        else {
-
-            _dividend = dividend;
-            appendix = 0;
+            dividend = -(dividend + appendix);
         }
 
-        int _divisor = divisor < 0 ? -divisor : divisor;
+        divisor = abs(divisor);
 
         int result = 0;
-        for(; _dividend>=_divisor;) {
+        for(; dividend>=divisor;) {
 
             int k=0;
-            for(; _divisor<=(_dividend>>k); ++k);
+            for(; divisor<=(dividend>>k); ++k);
 
-            _dividend  -= _divisor<<(k-1);
-            _dividend += appendix; appendix = 0;
+            dividend  -= divisor<<(k-1);
+            dividend += appendix; appendix = 0;
             result += (1<<(k-1));
         }
 
@@ -78,7 +75,7 @@ int main()
     return 0;
 #endif
 
-#if 1
+#if 0
     int A = 2147483647;
     int B = 2147483647;
     LOGV(A);
