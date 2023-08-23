@@ -2,85 +2,85 @@
 
 using namespace std;
 
+#define LOGGER_NAME LOG
 #include "logger.hpp"
 Logger LOG("leetcode.log", &std::cerr);
 
 class Solution {
 public:
     int divide(int dividend, int divisor) {
-        return 0;
+
+        if(1 == divisor)
+            return dividend;
+
+        if(-1 == divisor) {
+
+            if(-(1UL<<31) == dividend)
+                return (1UL<<31)-1;
+
+            return -dividend;
+        }
+
+        bool minus = dividend < 0 != divisor < 0;
+        dividend = abs(dividend);
+        divisor = abs(divisor);
+#if 1
+        unsigned short i=0;
+        for(; 1 < divisor>>i; ++i) {
+
+//            LOGV(i);
+//            LOGV(divisor>>i);
+        }
+
+        return dividend>>i;
+#else
+        int quotient = 0;
+        int rest = dividend;
+        while(rest > 0) {
+
+            unsigned short i=0;
+            for(; divisor>>(i+1) == 1; ++i);
+            LOGV(i);
+            rest = rest - (rest>>i);
+        }
+        return ;
+#endif
     }
 };
 
-class Prop {
-    int m_v;
-public:
-    Prop(int v=777) : m_v(v) {LOG << '[' << this << "] " << "Prop(" << m_v << ")";}
-    ~Prop() {LOG << '[' << this << "] " << "~Prop(" << m_v << ")";}
-};
-
-class Base {
-public:
-    Prop m_prop2;
-    Prop m_prop1;
-    Base() : m_prop1(1), m_prop2(2) {LOG << '[' << this << "] " << "Base()";}
-    ~Base() {LOG << '[' << this << "] " << "~Base()";}
-};
-
-struct A {
-    virtual void test() {LOG << "A::test";}
-};
-
-struct B : public A {
-    virtual void test() {LOG << "B::test";}
-};
-
-struct C1 {
-    operator std::string() {
-        return "Hello, I'm C1!";
-    }
-};
-struct C2 {
-    int m_x;
-    long m_z;
-    operator std::string() {
-        return "Hello, I'm C2!";
-    }
-};
-
-int operator"" _RU(unsigned long long x) {
-    return x / 1000;
-}
 
 int main()
 {
-//    Base b;
+    LOGV(37/7);
+    LOGV(Solution().divide(37, 7));
+    return 0;
 
-    char c('x');
+    int A=34;
+    for(int i=0; i<A; ++i) {
 
-    LOG << "char: " << c;
-    LOG << "static_cast<int>: " << static_cast<int>(c);
-    int x = 121;
-    LOG << "reinterpret_cast<char *>: " << *reinterpret_cast<char *>(&x);
-    LOG << "reinterpret_cast<int *>: " << *reinterpret_cast<int *>(&c);
+        LOGV(i);
+        LOGV(A>>i);
+        LOGV(A/(1<<i));
+    }
 
-    C1 c1;
-    LOG << "reinterpret_cast<C2 *>(C1): " << std::string(*reinterpret_cast<C2 *>(&c1));
+    return 0;
 
-    B b;
-    A &ra = b;
-    dynamic_cast<B&>(ra).test();
+    int dividend = -(1L<<31);
+    int divisor = -1;
 
-    LOG << "+++++";
-    A a;
-    B &rb = static_cast<B&>(a);
-    rb.test();
+    dividend = 34;
+    divisor = 6;
 
-    LOG << "+++++";
-    B().test();
+    LOGV((1L<<31)-1);
+    for(int i=1; i<=dividend; ++i) {
 
-    LOG << "+++++";
-    LOG << 14500_RU;
+        LOGV("===========");
+        divisor = i;
+        LOGV(dividend);
+        LOGV(divisor);
+        LOGV(dividend/divisor);
+        LOGV(Solution().divide(dividend, divisor));
+    }
 
     return 0;
 }

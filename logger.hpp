@@ -5,6 +5,8 @@
 #include <string>
 #include <iostream>
 
+#define LOGV(VALUE) LOGGER_NAME << # VALUE ": " << (VALUE)
+
 class Logger;
 
 class Logger {
