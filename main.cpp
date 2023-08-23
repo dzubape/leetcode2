@@ -15,71 +15,76 @@ public:
 
         if(-1 == divisor) {
 
-            if(-(1UL<<31) == dividend)
-                return (1UL<<31)-1;
+            if(-(1L<<31) == dividend)
+                return (1L<<31)-1;
 
             return -dividend;
         }
 
-        bool minus = dividend < 0 != divisor < 0;
-        dividend = abs(dividend);
-        divisor = abs(divisor);
-#if 1
-        unsigned short i=0;
-        for(; 1 < divisor>>i; ++i) {
+        if(divisor == dividend)
+            return 1;
 
-//            LOGV(i);
-//            LOGV(divisor>>i);
+        bool minus = (dividend < 0) != (divisor < 0);
+
+        int64_t _dividend = dividend < 0 ? -int64_t(dividend) : dividend;
+        int64_t _divisor = divisor < 0 ? -int64_t(divisor) : divisor;
+
+        if(_divisor > _dividend)
+            return 0;
+
+//        if(_divisor == _dividend)
+//            return minus ? -1 : 1;
+
+        int result = 0;
+        for(; _dividend>=_divisor;) {
+
+            int k=0;
+            for(; (_divisor<<k)<=_dividend; ++k);
+
+            _dividend  -= _divisor<<(k-1);
+            result += (1<<(k-1));
         }
 
-        return dividend>>i;
-#else
-        int quotient = 0;
-        int rest = dividend;
-        while(rest > 0) {
-
-            unsigned short i=0;
-            for(; divisor>>(i+1) == 1; ++i);
-            LOGV(i);
-            rest = rest - (rest>>i);
-        }
-        return ;
-#endif
+        return minus ? -result : result;
     }
 };
 
-
 int main()
 {
-    LOGV(37/7);
-    LOGV(Solution().divide(37, 7));
+
+#if 0
+    int A = -2147483648;
+    int B = -1;
+    LOGV(A);
+    LOGV(B);
+    LOGV(A/B);
+    LOGV(Solution().divide(A, B));
     return 0;
+#endif
+    const int MIN_INT = -(1L<<31);
+    const int MAX_INT = (1L<<31)-1;
+    for(int i=MIN_INT; i<=MAX_INT; ++i) {
 
-    int A=34;
-    for(int i=0; i<A; ++i) {
+        if((i>>15)<<15 == i)
+            LOGV(i);
+        for(int j=-10; j<10; ++j) {
 
-        LOGV(i);
-        LOGV(A>>i);
-        LOGV(A/(1<<i));
-    }
+//            LOGV(i);
+//            LOGV(j);
 
-    return 0;
+            if(!j)
+                continue;
 
-    int dividend = -(1L<<31);
-    int divisor = -1;
+            if(MIN_INT == i && -1 == j)
+                continue;
 
-    dividend = 34;
-    divisor = 6;
+//            LOGV(i/j);
+//            LOGV(Solution().divide(i, j));
+//            LOGV(i/j == Solution().divide(i, j));
 
-    LOGV((1L<<31)-1);
-    for(int i=1; i<=dividend; ++i) {
-
-        LOGV("===========");
-        divisor = i;
-        LOGV(dividend);
-        LOGV(divisor);
-        LOGV(dividend/divisor);
-        LOGV(Solution().divide(dividend, divisor));
+            if(i/j != Solution().divide(i, j))
+                return -1;
+        }
     }
 
     return 0;
