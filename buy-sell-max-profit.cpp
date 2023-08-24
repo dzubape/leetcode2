@@ -12,33 +12,31 @@ public:
 
 int Solution::maxProfit(std::vector<int>& prices) {
 
-    constexpr const int _INT_MAX = (1L<<31)-1;
-    constexpr const int _INT_MIN = -(1L<<31);
-
-    LOGV(_INT_MAX);
-    LOGV(_INT_MIN);
+#ifdef __SOLUTION_DEV
+    constexpr const int INT_MAX = (1L<<31)-1;
+    constexpr const int INT_MIN = -(1L<<31);
+#endif
 
     int maxProfit = 0;
 
-    int buyPrice = _INT_MAX;
-    int sellPrice = _INT_MIN;
+    int buyPrice = INT_MAX;
+    int sellPrice = INT_MIN;
 
-    for(size_t i=0; i<prices.size(); ++i) {
+    typedef uint32_t SIZE_t;
+    for(SIZE_t i=0; i<prices.size(); ++i) {
 
-        int price = prices[i];
+        if(prices[i] < buyPrice) {
 
-        if(price < buyPrice) {
-
-            buyPrice = price;
-            sellPrice = price;
+            buyPrice = sellPrice = prices[i];
         }
-        else if(price > sellPrice) {
+        else if(prices[i] > sellPrice) {
 
-            sellPrice = price;
+            sellPrice = prices[i];
+            prices[i] -= buyPrice;
 
-            if(sellPrice - buyPrice > maxProfit) {
+            if(prices[i] > maxProfit) {
 
-                maxProfit = sellPrice - buyPrice;
+                maxProfit = prices[i];
             }
         }
     }
@@ -56,8 +54,36 @@ int Solution::test_maxProfit() {
     std::ifstream fs("../test_input.json");
     auto data = json::parse(fs);
     testData = data.get<std::vector<int>>();
-//    LOGV(data);
+    LOGV(data.size());
     int profit = maxProfit(testData);
     fs.close();
     return 0;
 }
+
+#if 0
+// BEST SOLUTION //
+int init = [] {
+    cin.tie(nullptr)->sync_with_stdio(false);
+    freopen("user.out", "w", stdout);
+
+    for (string s; getline(cin, s); cout << '\n') {
+        int solution = 0, minPrice = INT_MAX;
+        for (int _i = 1, _n = s.length(); _i < _n; ++_i) {
+            int price = s[_i++] & 15;
+            while ((s[_i] & 15) < 10) price = price * 10 + (s[_i++] & 15);
+            minPrice = min(minPrice, price);
+            solution = max(solution, price - minPrice);
+        }
+        cout << solution;
+    }
+    exit(0);
+    return 0;
+}();
+
+class Solution {
+public:
+    int maxProfit(vector<int>& prices) {
+        return 0;
+    }
+};
+#endif
