@@ -19,4 +19,8 @@ set(SOURCES
     logger.cpp
 )
 
-add_executable(leetcode2 ${INCLUDES} ${SOURCES})
+set(RESOURCES
+    test_input.json
+)
+
+add_executable(leetcode2 ${INCLUDES} ${SOURCES} ${RESOURCES})

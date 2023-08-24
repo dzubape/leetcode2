@@ -13,6 +13,9 @@ static Logger LOGGER_NAME;
 
 #include <vector>
 
+#include <nlohmann/json.hpp>
+using json = nlohmann::json;
+
 class Solution {
 public:
     ADD_CASE(divide, int, int, int);
