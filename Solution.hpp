@@ -11,9 +11,12 @@ static Logger LOGGER_NAME;
 
 #define TEST_CASE(CASE_NAME) (Solution().test_ ## CASE_NAME())
 
+#include <vector>
+
 class Solution {
 public:
     ADD_CASE(divide, int, int, int);
+    ADD_CASE(maxProfit, int, std::vector<int>&);
 };
 
 #endif // SOLUTION_HPP

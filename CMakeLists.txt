@@ -15,6 +15,7 @@ set(INCLUDES
 set(SOURCES
     main.cpp
     division-wo-division.cpp
+    buy-sell-max-profit.cpp
     logger.cpp
 )
 

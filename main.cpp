@@ -2,12 +2,13 @@
 
 using namespace std;
 
-#include "logger.hpp"
-Logger LOG("leetcode.log", &std::cerr);
-
 #include "Solution.hpp"
+
+#include "logger.hpp"
+#define LOGGER_NAME LOG
+Logger LOG("leetcode.log", &std::cerr);
 
 int main()
 {
-    return TEST_CASE(divide);
+    return TEST_CASE(maxProfit);
 }
