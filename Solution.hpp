@@ -20,6 +20,7 @@ class Solution {
 public:
     ADD_CASE(divide, int, int, int);
     ADD_CASE(maxProfit, int, std::vector<int>&);
+    ADD_CASE(searchInRotatedArray, int, std::vector<int>&, int);
 };
 
 #endif // SOLUTION_HPP
