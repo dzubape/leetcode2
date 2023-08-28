@@ -48,3 +48,5 @@ sed -zEi "s/tmpl\.cpp\n/\0    $PROBLEM_NAME.cpp\n/g" CMakeLists.txt
 sed -zEi "s/ADD_CASE\(tmpl, int, void\);\n/\0    ADD_CASE($PROBLEM_NAME_FORMATTED, $PROBLEM_RETURN, $PROBLEM_PARAMS);\n/g" Solution.hpp
 
 print_ok "<$PROBLEM_NAME> successfully has been added"
+
+git checkout -b "$PROBLEM_NAME"

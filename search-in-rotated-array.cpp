@@ -13,7 +13,7 @@ public:
 
 typedef int16_t SIZE_t;
 
-SIZE_t searchInSortedArray(std::vector<int> &nums, int target, SIZE_t bottom=0, SIZE_t top=-1) {
+static SIZE_t searchInSortedArray(std::vector<int> &nums, int target, SIZE_t bottom=0, SIZE_t top=-1) {
 
     top = top<0 ? nums.size()-1 : top;
 
