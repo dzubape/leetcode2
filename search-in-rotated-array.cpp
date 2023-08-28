@@ -2,7 +2,7 @@
 #define LOGGER_NAME LOG
 #include "Solution.hpp"
 #else
-#define LOGV(VALUE) ()
+#define LOGV(VALUE) (false)
 #define searchInRotatedArray search
 class Solution {
 public:
@@ -11,7 +11,7 @@ public:
 };
 #endif
 
-typedef int SIZE_t;
+typedef int16_t SIZE_t;
 
 SIZE_t searchInSortedArray(std::vector<int> &nums, int target, SIZE_t bottom=0, SIZE_t top=-1) {
 
@@ -80,7 +80,7 @@ int Solution::searchInRotatedArray(std::vector<int> &nums, int target) {
 
     if(nums[top] < nums[bottom]) {
 
-        SIZE_t rotationIdx = top;
+        const SIZE_t rotationIdx = top;
 
         if(target >= nums[0])
             return searchInSortedArray(nums, target, 0, rotationIdx-1);
