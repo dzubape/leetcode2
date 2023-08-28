@@ -18,6 +18,7 @@ using json = nlohmann::json;
 
 class Solution {
 public:
+    ADD_CASE(tmpl, int, void);
     ADD_CASE(divide, int, int, int);
     ADD_CASE(maxProfit, int, std::vector<int>&);
     ADD_CASE(searchInRotatedArray, int, std::vector<int>&, int);

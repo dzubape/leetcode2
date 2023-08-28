@@ -17,13 +17,16 @@ set(INCLUDES
 set(SOURCES
     main.cpp
     logger.cpp
+    tmpl.cpp
     division-wo-division.cpp
     buy-sell-max-profit.cpp
     search-in-rotated-array.cpp
 )
 
 set(RESOURCES
+    add-problem.sh
     test_input.json
+    README.md
 )
 
 add_executable(leetcode2 ${INCLUDES} ${SOURCES} ${RESOURCES})
