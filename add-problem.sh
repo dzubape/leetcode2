@@ -31,6 +31,7 @@ fi
 if (( $# > 2))
 then
     PROBLEM_PARAMS=${@:3}
+    PROBLEM_PARAMS=$(printf "%q" "$PROBLEM_PARAMS")
 fi
 
 PROBLEM_NAME=$1
