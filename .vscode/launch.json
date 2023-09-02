@@ -1,0 +1,14 @@
+{
+    "externalConsole": true,
+    "request": "launch",
+    "program": "./build/leetcode2",
+    "type": "cppdbg",
+    "linux": {
+        "MIMode": "gdb",
+        "miDebuggerPath": "/usr/bin/gdb"
+      },
+    "configurations": [
+        
+
+    ],
+}

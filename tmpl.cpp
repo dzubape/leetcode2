@@ -12,9 +12,11 @@ public:
 
 int Solution::tmpl(void) {
 
+    return 0;
 }
 
 
 int Solution::test_tmpl() {
 
+    return 0;
 }
