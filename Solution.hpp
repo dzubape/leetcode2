@@ -18,13 +18,17 @@ using namespace std;
 #include <nlohmann/json.hpp>
 using json = nlohmann::json;
 
+#define METHOD_RETURN int
+#define METHOD_PARAMS void
+
 class Solution {
 public:
-    ADD_CASE(tmpl, int, void);
+    // CASES //
     ADD_CASE(search_in_matrix, bool, vector<vector<int>>&, int);
     ADD_CASE(divide, int, int, int);
     ADD_CASE(maxProfit, int, std::vector<int>&);
     ADD_CASE(searchInRotatedArray, int, std::vector<int>&, int);
+    ADD_CASE(METHOD_NAME, METHOD_RETURN, METHOD_PARAMS);
 };
 
 #endif // SOLUTION_HPP

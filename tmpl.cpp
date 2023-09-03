@@ -3,20 +3,20 @@
 #include "Solution.hpp"
 #else
 #define LOGV(VALUE)
+#define METHOD_NAME LEETCODE_METHOD_NAME
 class Solution {
 public:
-    int tmpl(void);
+    METHOD_RETURN METHOD_NAME(METHOD_PARAMS);
 
 };
 #endif
 
-int Solution::tmpl(void) {
+METHOD_RETURN Solution::METHOD_NAME(METHOD_PARAMS) {
 
-    return 0;
 }
 
 
-int Solution::test_tmpl() {
+int Solution::test_METHOD_NAME() {
 
     return 0;
 }
