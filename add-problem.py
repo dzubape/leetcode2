@@ -80,39 +80,58 @@ def add_problem(args):
     print(f'{taskInWords = }')
     print(f'{taskDashed = }')
 
-    with open('CMakeLists.txt', 'r+') as fp_src, open('new.CMakeLists.txt', 'w') as fp_dst:
-        for line in fp_src.readlines():
-            # print(f'{line = }')
-            # print(line, end='')
-            fp_dst.write(line)
-            if line.find("tmpl.cpp") < 0:
-                continue
-            line = line.replace('tmpl.cpp', f'{taskDashed}.cpp')
-            fp_dst.write(line)
-            # print(line, end='')
-    # os.rename('new.CMakeLists.txt', 'CMakeLists.txt')
+    try:
+        tmpFileName = 'new.CMakeLists.txt'
+        with open('CMakeLists.txt', 'r+') as fp_src, open(tmpFileName, 'w') as fp_dst:
+            insertLine = f'{taskDashed}.cpp'
+            for line in fp_src.readlines():
+                if line.find(insertLine) >= 0:
+                    print(f'>>{insertLine}<< is already in CMakeLists.txt')
+                    raise int
 
-    with open('tmpl.cpp', 'r') as fp_src, open(f'{taskDashed}.cpp', 'w') as fp_dst:
+            fp_src.seek(0)
+            for line in fp_src.readlines():
+                # print(f'{line = }')
+                # print(line, end='')
+                fp_dst.write(line)
+                if line.find("tmpl.cpp") < 0:
+                    continue
+                line = line.replace('tmpl.cpp', insertLine)
+                fp_dst.write(line)
+                # print(line, end='')
+        os.rename(tmpFileName, 'CMakeLists.txt')
+    except:
+        os.remove(tmpFileName)
+
+    tmpFileName = f'{taskDashed}.cpp'
+    with open('tmpl.cpp', 'r') as fp_src, open(tmpFileName, 'w') as fp_dst:
         for line in fp_src.readlines():
             line = line.replace('LEETCODE_METHOD_NAME', signature['name'])
             line = line.replace('METHOD_NAME', methodName)
             line = line.replace('METHOD_RETURN', methodReturn)
             line = line.replace('METHOD_PARAMS', methodParams)
             fp_dst.write(line)
-    # os.rename('new.tmpl.cpp', 'tmpl.cpp')
 
-    with open('Solution.hpp', 'r') as fp_src, open('new.Solution.hpp', 'w') as fp_dst:
-        for line in fp_src.readlines():
-            fp_dst.write(line)
-            if line.find('// CASES //') < 0:
-                continue
-            matches = re.match(r'^\s+', line)
-            indent = matches[0]
-            # fp_dst.write(indent + f'{methodReturn} {methodName}({methodParams});\n')
-            fp_dst.write(indent + f'ADD_CASE({methodName}, {methodReturn}, {methodParams});\n')
-    # os.rename('new.Solution.hpp', 'Solution.hpp')
-
-    
+    try:
+        tmpFileName = 'new.Solution.hpp'
+        with open('Solution.hpp', 'r') as fp_src, open(tmpFileName, 'w') as fp_dst:
+            insertLine = f'ADD_CASE({methodName}, ESCAPE_COMMAS({methodReturn}), {methodParams});'
+            for line in fp_src.readlines():
+                if line.find(insertLine) >= 0:
+                    print(f'>>{insertLine}<< is already in Solution.hpp')
+                    raise int
+            fp_src.seek(0)
+            for line in fp_src.readlines():
+                fp_dst.write(line)
+                if line.find('// CASES //') < 0:
+                    continue
+                matches = re.match(r'^\s+', line)
+                indent = matches[0]
+                fp_dst.write(indent + f'{insertLine}\n')
+        os.rename(tmpFileName, 'Solution.hpp')
+    except:
+        os.remove(tmpFileName)
+        
 
 if __name__ == '__main__':
     if len(sys.argv) < 2:
