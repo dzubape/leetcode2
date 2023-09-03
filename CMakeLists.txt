@@ -18,6 +18,7 @@ set(SOURCES
     main.cpp
     logger.cpp
     tmpl.cpp
+    sliding-window-max.cpp
     search-in-matrix.cpp
     division-wo-division.cpp
     buy-sell-max-profit.cpp

@@ -131,6 +131,8 @@ def add_problem(args):
         os.rename(tmpFileName, 'Solution.hpp')
     except:
         os.remove(tmpFileName)
+
+    eval(f'git checkout -b {taskDashed}')
         
 
 if __name__ == '__main__':
