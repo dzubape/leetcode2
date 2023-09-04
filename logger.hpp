@@ -3,6 +3,7 @@
 
 #include <fstream>
 #include <string>
+#include <vector>
 #include <iostream>
 
 #define LOGV(VALUE) LOGGER_NAME << # VALUE ": " << (VALUE)
@@ -50,5 +51,21 @@ public:
         return LogTrail(this);
     }
 };
+
+template<typename T>
+std::ostream& operator<<(std::ostream& os, const std::vector<T>& value) {
+
+    os << '[';
+    for(size_t i=0; i<value.size(); ++i) {
+
+        auto& v = value[i];
+        if(i > 0)
+            os << ", ";
+        os << v;
+    }
+    os << ']';
+
+    return os;
+}
 
 #endif // LOGGER_HPP

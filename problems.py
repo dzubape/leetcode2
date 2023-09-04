@@ -132,7 +132,9 @@ def add_problem(args):
     except:
         os.remove(tmpFileName)
 
-    eval(f'git checkout -b {taskDashed}')
+    os.system(f'git checkout -b {taskDashed}')
+    os.system(f'git add {taskDashed}.cpp CMakeLists.txt Solution.hpp')
+    os.system(f'git commit --amend -m "{taskDashed} initial"')
         
 
 if __name__ == '__main__':
