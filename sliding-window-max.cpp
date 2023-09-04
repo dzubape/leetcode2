@@ -36,7 +36,7 @@ vector<int> Solution::slidingWindowMax(vector<int>& nums, int k) {
             continue;
         }
 
-        LOG << "review";
+        // LOG << "review";
         currentMaxValue = -(1L<<31);
         
         for(SIZE_t j=i-k+1; j<=i; ++j) {
@@ -57,12 +57,26 @@ vector<int> Solution::slidingWindowMax(vector<int>& nums, int k) {
 #ifdef __SOLUTION_DEV
 int Solution::test_slidingWindowMax() {
 
-    const int k = 3;
+    int k = 3;
     const int n = (k + 2) * 3;
     vector<int> nums(n, 0);
     nums[k+1] = 1;
     nums[2*(k+1)] = 1;
+#if 0
     auto result = slidingWindowMax(nums, k);
+#else
+    // auto result = timingRunner<
+    //     vector<int>,
+    //     (Solution::*)(vector<int>&, int),
+    //     vector<int>&, int
+    // >(slidingWindowMax, nums, k);
+    vector<int> result = timingRunner<vector<int>, vector<int>&, int>(
+        &Solution::slidingWindowMax,
+        nums,
+        int(k)
+    );
+    LOG << "duration: " << m_duration.value << m_duration.units;
+#endif
     LOGV(k);
     LOGV(n);
     LOGV(nums);

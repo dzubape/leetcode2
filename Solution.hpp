@@ -15,6 +15,7 @@ static Logger LOGGER_NAME;
 #include <vector>
 #include <map>
 #include <string>
+#include <chrono>
 
 using namespace std;
 
@@ -25,7 +26,38 @@ using json = nlohmann::json;
 #define METHOD_PARAMS void
 
 class Solution {
+    struct {
+        uint32_t value;
+        std::string units;
+    } m_duration;
 public:
+#if 0
+    template<typename _Ret, typename _Method, typename... _Params>
+    _Ret timingRunner(_Method f, _Params... params) {
+
+        auto start = chrono::system_clock::now();
+        auto result = (this->*f)(params ...);
+        auto end = chrono::system_clock::now();
+        auto duration = end - start;
+        auto durationMcs = chrono::duration_cast<chrono::microseconds>(duration);
+        LOGV(durationMcs);
+        return result;
+    }
+#else
+    template<typename _Ret, typename... _Params>
+    _Ret timingRunner(_Ret (Solution::*f)(_Params...), _Params... params) {
+
+        auto start = chrono::system_clock::now();
+        auto result = (this->*f)(params...);
+        auto end = chrono::system_clock::now();
+        auto duration = end - start;
+        auto durationMcs = chrono::duration_cast<chrono::microseconds>(duration);
+        m_duration.value = durationMcs.count();
+        m_duration.units = "mcs";
+        // LOGV(durationMcs);
+        return result;
+    }
+#endif
     // CASES //
     ADD_CASE(slidingWindowMax, ESCAPE_COMMAS(vector<int>), vector<int>& nums, int k);
     ADD_CASE(search_in_matrix, ESCAPE_COMMAS(bool), vector<vector<int>>&, int);
