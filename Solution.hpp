@@ -22,6 +22,8 @@ using namespace std;
 #include <nlohmann/json.hpp>
 using json = nlohmann::json;
 
+json getTestInput(const std::string& filepath="test_input.json");
+
 #define METHOD_RETURN int
 #define METHOD_PARAMS void
 
@@ -55,8 +57,8 @@ public:
         auto duration = end - start;
         auto durationMcs = chrono::duration_cast<chrono::microseconds>(duration);
         m_duration.value = durationMcs.count();
-        m_duration.units = "mcs";
-        // LOGV(durationMcs);
+        m_duration.units = "mics";
+        printDuration();
         return result;
     }
 #endif

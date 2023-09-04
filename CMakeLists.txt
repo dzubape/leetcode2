@@ -17,6 +17,7 @@ set(INCLUDES
 set(SOURCES
     main.cpp
     logger.cpp
+    Solution.cpp
     tmpl.cpp
     sliding-window-max.cpp
     search-in-matrix.cpp

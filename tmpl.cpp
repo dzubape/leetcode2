@@ -13,6 +13,7 @@ public:
 
 METHOD_RETURN Solution::METHOD_NAME(METHOD_PARAMS) {
 
+    return 0;
 }
 
 #ifdef __SOLUTION_DEV

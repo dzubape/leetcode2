@@ -62,26 +62,20 @@ int Solution::test_slidingWindowMax() {
     vector<int> nums(n, 0);
     nums[k+1] = 1;
     nums[2*(k+1)] = 1;
-#if 0
-    auto result = slidingWindowMax(nums, k);
-#else
-    // auto result = timingRunner<
-    //     vector<int>,
-    //     (Solution::*)(vector<int>&, int),
-    //     vector<int>&, int
-    // >(slidingWindowMax, nums, k);
+
+    getTestInput("../test_input.json").get_to(nums);
+
     vector<int> result = timingRunner<vector<int>, vector<int>&, int>(
         &Solution::slidingWindowMax,
         nums,
-        int(k)
+        k
     );
-    // LOG << "duration: " << m_duration.value << m_duration.units;
-    printDuration();
-#endif
+
     LOGV(k);
     LOGV(n);
     LOGV(nums);
     LOGV(result);
+    printDuration();
     return 0;
 }
 #endif
