@@ -75,7 +75,8 @@ int Solution::test_slidingWindowMax() {
         nums,
         int(k)
     );
-    LOG << "duration: " << m_duration.value << m_duration.units;
+    // LOG << "duration: " << m_duration.value << m_duration.units;
+    printDuration();
 #endif
     LOGV(k);
     LOGV(n);

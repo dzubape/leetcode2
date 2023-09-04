@@ -30,6 +30,8 @@ class Solution {
         uint32_t value;
         std::string units;
     } m_duration;
+
+    void printDuration();
 public:
 #if 0
     template<typename _Ret, typename _Method, typename... _Params>
