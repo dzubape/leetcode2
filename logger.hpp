@@ -4,6 +4,7 @@
 #include <fstream>
 #include <string>
 #include <vector>
+#include <map>
 #include <iostream>
 
 #define LOGV(VALUE) LOGGER_NAME << # VALUE ": " << (VALUE)
@@ -64,6 +65,23 @@ std::ostream& operator<<(std::ostream& os, const std::vector<T>& value) {
         os << v;
     }
     os << ']';
+
+    return os;
+}
+
+template<typename T, typename U>
+std::ostream& operator<<(std::ostream& os, const std::map<T, U>& m) {
+
+    os << '{';
+    size_t i=0;
+    for(auto it=m.begin(); it!=m.end(); ++it) {
+
+        if(i > 0)
+            os << ", ";
+        os << it->first << ": " << it->second;
+        ++i;
+    }
+    os << '}';
 
     return os;
 }

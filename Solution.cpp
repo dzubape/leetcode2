@@ -5,10 +5,27 @@ json getTestInput(const std::string& filepath) {
 
     ifstream ifs(filepath);
     auto data = json::parse(ifs);
-    LOGV(data);
+    // LOGV(data);
     return data;
 }
 
 void Solution::printDuration() {
-    LOG << "duration: " << m_duration.value << m_duration.units;
+
+    auto value = m_duration.value;
+    std::string units = m_duration.units;
+
+    if(m_duration.value * 1e-3 > 10) {
+
+        if(m_duration.value * 1e-6 > 10) {
+
+            value *= 1e-6;
+            units = "sec";
+        }
+        else {
+
+            value *= 1e-3;
+            units = "msec";
+        }
+    }
+    LOG << "duration: " << value << units;
 }
