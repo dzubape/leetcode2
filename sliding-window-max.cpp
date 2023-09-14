@@ -11,14 +11,14 @@ public:
 };
 #endif
 
-typedef size_t SIZE_t;
+typedef ssize_t SIZE_t;
 
 #if 0
 #define TEST_OUTPUT "brute_force.json"
 vector<int> Solution::slidingWindowMax(vector<int>& nums, int k) {
 
     vector<int> result(nums.size()-k+1);
-    int currentMaxValue = -(1L<<31);
+    int currentMaxValue = (1L<<31)-1;
     SIZE_t currentMaxIdx(-1);
 
     int secondMaxValue = -(1L<<31);
@@ -30,7 +30,8 @@ vector<int> Solution::slidingWindowMax(vector<int>& nums, int k) {
 
         // LOGV(i);
 
-        if(currentMaxIdx > i - k) {
+        // current max still within window
+        if(currentMaxIdx >= i-k+1) {
 
             if(nums[i] > currentMaxValue) {
 
@@ -81,26 +82,15 @@ vector<int> Solution::slidingWindowMax(vector<int>& nums, int k) {
     // i is the last member in a window
     for(SIZE_t i=k-1; i<nums.size(); ++i) {
 
-        const auto num = nums[i];
-        // LOGV(num);
+        tail[nums[i]] = i;
 
-        tail[num] = i;
+        for(auto it=--tail.end(); it != tail.begin(); --it) {
 
-        for(auto it=--tail.end();;) {
+            if(i-k+1 <= it->second)
+                break;
 
             // clearing cache with obsolete values
-            if(i-k+1 > it->second) {
-
-                it = tail.erase(it);
-
-                if(it == tail.begin())
-                    break;
-                
-                --it;
-                continue;
-            }
-
-            break;
+            it = tail.erase(it);
         }
 
         result[i-k+1] = tail.rbegin()->first;
