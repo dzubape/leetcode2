@@ -11,7 +11,8 @@ public:
 };
 #endif
 
-typedef ssize_t SIZE_t;
+typedef int32_t SIZE_t;
+typedef int16_t VALUE_t;
 
 #if 0
 #define TEST_OUTPUT "brute_force.json"
@@ -67,12 +68,46 @@ vector<int> Solution::slidingWindowMax(vector<int>& nums, int k) {
     return result;
 }
 #elif 1
+#define TEST_OUTPUT "optimized_pop.json"
+vector<int> Solution::slidingWindowMax(vector<int>& nums, int k) {
+
+    vector<int> result(nums.size()-k+1);
+
+    map<VALUE_t, SIZE_t> tail;
+
+    for(SIZE_t i=0; i<k; ++i) {
+
+        tail[nums[i]] = i;
+    }
+
+    // i is the last member in a window
+    SIZE_t popCounter = 0;
+    for(SIZE_t i=k-1; i<nums.size(); ++i) {
+
+        if(i-k >= 0) {
+
+            auto it = tail.find(nums[i-k]);
+            if(it->second == i-k) {
+
+                tail.erase(it);
+                ++popCounter;
+            }
+        }
+
+        tail[nums[i]] = i;
+        result[i-k+1] = tail.rbegin()->first;
+    }
+    LOGV(popCounter);
+
+    return result;
+}
+#elif 1
 #define TEST_OUTPUT "map_sorted.json"
 vector<int> Solution::slidingWindowMax(vector<int>& nums, int k) {
 
     vector<int> result(nums.size()-k+1);
 
-    map<int, SIZE_t> tail;
+    map<VALUE_t, SIZE_t> tail;
 
     for(SIZE_t i=0; i<k; ++i) {
 
@@ -86,7 +121,7 @@ vector<int> Solution::slidingWindowMax(vector<int>& nums, int k) {
 
         for(auto it=--tail.end(); it != tail.begin(); --it) {
 
-            if(i-k+1 <= it->second)
+            if(i-k+1 <= it->second) 
                 break;
 
             // clearing cache with obsolete values

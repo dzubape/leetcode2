@@ -144,15 +144,7 @@ if __name__ == '__main__':
     task = sys.argv[1]
     print(f'{task = }')
 
-    testPhrase = 'hello this is me PEtya'
-
     if 'add' == task:
         add_problem(sys.argv[2:])
-    elif 'camel' == task:
-        camel = joinWithCamel(testPhrase)
-        print(f'{camel = }')
-    elif 'underscore' == task:
-        underscored = joinWithUnderscore(testPhrase)
-        print(f'{underscored = }')
     else:
         print(f'Unrecognized task <{task}>')
