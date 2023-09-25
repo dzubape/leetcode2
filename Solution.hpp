@@ -13,9 +13,11 @@ static Logger LOGGER_NAME;
 #define TEST_CASE(CASE_NAME) (Solution().test_ ## CASE_NAME())
 
 #include <vector>
+#include <queue> 
 #include <map>
 #include <list>
 #include <string>
+#include <set>
 #include <iterator>
 #include <chrono>
 

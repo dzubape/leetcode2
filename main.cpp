@@ -10,5 +10,5 @@ Logger LOG("leetcode.log", &std::cerr);
 
 int main()
 {
-    return TEST_CASE(slidingWindowMax);
+    return TEST_CASE(findConcatSubstrList);
 }
