@@ -19,7 +19,7 @@ typedef int word_count_t;
 
 inline bool isEqualFixLengthStrings(const string &a, const string &b) {
 
-    return true;
+    return a == b;
 }
 
 #if 1
@@ -37,7 +37,7 @@ vector<int> Solution::findConcatSubstrList(string str, vector<string>& words) {
     const size_t wordSize = words[0].size();
 
     // squeezing word vector to map<word_idx_t, word_count_t>
-    map<word_idx_t, word_count_t> uniqueWordIdcs;
+    map<word_idx_t, word_count_t> wordIdx2wordCountMap;
     {
         map<string, pair<word_idx_t, word_count_t>> uniqueWords;
         word_idx_t uniqueWordCount = 0;
@@ -61,21 +61,21 @@ vector<int> Solution::findConcatSubstrList(string str, vector<string>& words) {
 
             auto wordIdx = it->second.first;
             auto wordCount = it->second.second;
-            uniqueWordIdcs[wordIdx] = wordCount;
+            wordIdx2wordCountMap[wordIdx] = wordCount;
         }
     }
 
     // fullfilling word occurencies vector
-    vector<str_pos_t> occurenceMap(strLength - wordLength + 1, str_pos_t(-1));
+    vector<str_pos_t> wordsEntryMap(strLength - wordLength + 1, str_pos_t(-1));
     for(str_pos_t strPos=0; strPos<=strLength - wordLength; ++strPos) {
 
-        for(auto it=uniqueWordIdcs.begin(); it != uniqueWordIdcs.end(); ++it) {
+        for(auto it=wordIdx2wordCountMap.begin(); it != wordIdx2wordCountMap.end(); ++it) {
 
             auto wordIdx = it->first;
 
             if(isEqualFixLengthStrings(str.substr(strPos, wordLength), words[wordIdx])) {
 
-                occurenceMap[strPos] = wordIdx;
+                wordsEntryMap[strPos] = wordIdx;
                 break;
             }
 
@@ -84,39 +84,41 @@ vector<int> Solution::findConcatSubstrList(string str, vector<string>& words) {
 
 #if 1
     queue<word_idx_t> chain;
-    auto wordCounter = uniqueWordIdcs;
-    for(size_t startPos=0, searchEnd=occurenceMap.size()-wordCount*wordSize; startPos<=searchEnd; ++startPos) {
+    for(str_pos_t shift=0; shift<wordSize; ++shift) {
 
         word_idx_t wordDiscounter = wordCount;
+        auto wordCounter = wordIdx2wordCountMap;
         
-        for(str_pos_t wordPos=startPos; wordPos<occurenceMap.size(); wordPos+=wordSize) {
+        for(str_pos_t wordPos=shift; wordPos<wordsEntryMap.size(); wordPos+=wordSize) {
 
-            word_idx_t wordIdx = occurenceMap[wordPos];
+            word_idx_t wordIdx = wordsEntryMap[wordPos];
             if(wordIdx < 0) {
                 
                 while(chain.size())
                     chain.pop();
-                wordCounter = uniqueWordIdcs;
-                break;
+                wordCounter = wordIdx2wordCountMap;
+                continue;
             }
 
             if(wordCounter[wordIdx] == 0) {
 
+                word_idx_t removedWordIdx;
                 do {
 
-                    word_idx_t removedWordIdx = chain.front();
+                    removedWordIdx = chain.front();
                     chain.pop();
                     ++wordCounter[removedWordIdx];
                     ++wordDiscounter;
                 }
-                while(chain.front() != wordIdx);
+                while(removedWordIdx != wordIdx);
             }
             --wordCounter[wordIdx];
             --wordDiscounter;
+            chain.push(wordIdx);
 
             if(wordDiscounter == 0) {
 
-                result.push_back(wordIdx);
+                result.push_back(wordPos - wordSize * (wordCount - 1));
 
 #if 0
                 word_idx_t removedWordIdx = chain.front();
