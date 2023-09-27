@@ -5,10 +5,6 @@ project(leetcode2 LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# add_definitions(
-#     -D__SOLUTION_DEV=1
-# )
-
 set(INCLUDES
     logger.hpp
     Solution.hpp
@@ -38,4 +34,5 @@ add_executable(leetcode2 ${INCLUDES} ${SOURCES} ${RESOURCES})
 target_compile_definitions(leetcode2
     PRIVATE
     __SOLUTION_DEV=1
+    CMAKE_BUILD_TYPE=Debug
 )

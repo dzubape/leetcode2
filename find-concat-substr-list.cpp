@@ -13,9 +13,9 @@ public:
 #endif
 
 typedef size_t word_length_t;
-typedef ssize_t str_pos_t;
-typedef ssize_t word_idx_t;
-typedef int word_count_t;
+typedef int16_t str_pos_t;
+typedef int16_t word_idx_t;
+typedef int16_t word_count_t;
 
 inline bool isEqualFixLengthStrings(const string &a, const string &b) {
 
@@ -35,6 +35,9 @@ vector<int> Solution::findConcatSubstrList(string str, vector<string>& words) {
     const str_pos_t strLength = str.length();
     const size_t wordCount = words.size();
     const size_t wordSize = words[0].size();
+
+    if(wordLength > strLength)
+        return result;
 
     // squeezing word vector to map<word_idx_t, word_count_t>
     map<word_idx_t, word_count_t> wordIdx2wordCountMap;
@@ -86,8 +89,10 @@ vector<int> Solution::findConcatSubstrList(string str, vector<string>& words) {
     queue<word_idx_t> chain;
     for(str_pos_t shift=0; shift<wordSize; ++shift) {
 
-        word_idx_t wordDiscounter = wordCount;
-        auto wordCounter = wordIdx2wordCountMap;
+        word_idx_t totalWordDiscounter = wordCount;
+        auto wordDiscounter = wordIdx2wordCountMap;
+        while(chain.size())
+            chain.pop();
         
         for(str_pos_t wordPos=shift; wordPos<wordsEntryMap.size(); wordPos+=wordSize) {
 
@@ -96,27 +101,28 @@ vector<int> Solution::findConcatSubstrList(string str, vector<string>& words) {
                 
                 while(chain.size())
                     chain.pop();
-                wordCounter = wordIdx2wordCountMap;
+                wordDiscounter = wordIdx2wordCountMap;
+                totalWordDiscounter = wordCount;
                 continue;
             }
 
-            if(wordCounter[wordIdx] == 0) {
+            if(wordDiscounter[wordIdx] == 0) {
 
                 word_idx_t removedWordIdx;
                 do {
 
                     removedWordIdx = chain.front();
                     chain.pop();
-                    ++wordCounter[removedWordIdx];
-                    ++wordDiscounter;
+                    ++wordDiscounter[removedWordIdx];
+                    ++totalWordDiscounter;
                 }
                 while(removedWordIdx != wordIdx);
             }
-            --wordCounter[wordIdx];
-            --wordDiscounter;
+            --wordDiscounter[wordIdx];
+            --totalWordDiscounter;
             chain.push(wordIdx);
 
-            if(wordDiscounter == 0) {
+            if(totalWordDiscounter == 0) {
 
                 result.push_back(wordPos - wordSize * (wordCount - 1));
 
@@ -141,24 +147,39 @@ int Solution::test_findConcatSubstrList() {
     vector<string> words;
     string longString;
     auto jsonInput = getTestInput("../test_input.json");
-    jsonInput["words"].get_to(words);
-    jsonInput["s"].get_to(longString);
+    vector<int> answer;
 
+    for(auto it : jsonInput) {
 
-    vector<int> result = timingRunner<vector<int>, string, vector<string>&>(
-        &Solution::findConcatSubstrList,
-        longString,
-        words
-    );
+        LOG << "==========";
 
-    LOGV(result);
+        it["words"].get_to(words);
+        it["str"].get_to(longString);
+        it["answer"].get_to(answer);
 
-    auto outputJson = json(result);
-    auto ofs = ofstream("./" TEST_OUTPUT);
-    ofs << outputJson;
-    ofs.close();
+        vector<int> result = timingRunner<vector<int>, string, vector<string>&>(
+            &Solution::findConcatSubstrList,
+            longString,
+            words
+        );
 
-    printDuration();
+        sort(result.begin(), result.end());
+
+        LOGV(longString);
+        LOGV(words);
+        LOGV(answer);
+        LOGV(result);
+        LOGV(result == answer ? "PASSED" : "FAILED");
+        printDuration();
+
+        continue;
+
+        auto outputJson = json(result);
+        auto ofs = ofstream("./" TEST_OUTPUT);
+        ofs << outputJson;
+        ofs.close();
+    }
+
     return 0;
 }
 #endif
