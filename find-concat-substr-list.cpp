@@ -12,7 +12,7 @@ public:
 };
 #endif
 
-typedef size_t word_length_t;
+typedef int16_t word_length_t;
 typedef int16_t str_pos_t;
 typedef int16_t word_idx_t;
 typedef int16_t word_count_t;
