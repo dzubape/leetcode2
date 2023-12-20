@@ -19,6 +19,7 @@ set(SOURCES
     logger.cpp
     Solution.cpp
     tmpl.cpp
+    next-permutation.cpp
     sliding-window-max.cpp
     search-in-matrix.cpp
     division-wo-division.cpp

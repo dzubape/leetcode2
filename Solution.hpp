@@ -65,6 +65,7 @@ public:
     }
 #endif
     // CASES //
+    ADD_CASE(nextPermutation, ESCAPE_COMMAS(void), vector<int>& nums);
     ADD_CASE(slidingWindowMax, ESCAPE_COMMAS(vector<int>), vector<int>& nums, int k);
     ADD_CASE(search_in_matrix, ESCAPE_COMMAS(bool), vector<vector<int>>&, int);
     ADD_CASE(divide, int, int, int);
