@@ -37,8 +37,8 @@ void Solution::nextPermutation(vector<int>& nums) {
 }
 
 #ifdef __SOLUTION_DEV
-int Solution::test_nextPermutation() {    
-    auto testData = getTestInput("../test_input.json");
+int Solution::test_nextPermutation() {
+    auto testData = getTestInput(m_testInputFilepath);
     LOGV(testData);
     bool globalOk = true;
     for(size_t i=0; i<testData.size(); ++i) {

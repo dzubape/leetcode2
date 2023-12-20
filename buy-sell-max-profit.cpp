@@ -2,6 +2,7 @@
 #define LOGGER_NAME LOG
 #include "Solution.hpp"
 #else
+#define buySellMaxProfit maxProfit
 #define LOGV(VALUE)
 class Solution {
 public:
@@ -10,7 +11,7 @@ public:
 };
 #endif
 
-int Solution::maxProfit(std::vector<int>& prices) {
+int Solution::buySellMaxProfit(std::vector<int>& prices) {
 
 #ifdef __SOLUTION_DEV
     constexpr const int INT_MAX = (1L<<31)-1;
@@ -47,7 +48,7 @@ int Solution::maxProfit(std::vector<int>& prices) {
 
 #include <iostream>
 
-int Solution::test_maxProfit() {
+int Solution::test_buySellMaxProfit() {
 
     std::vector<int> testData = {1, 2, 3, 4, 3, 4, 5, 5};
 
@@ -55,7 +56,7 @@ int Solution::test_maxProfit() {
     auto data = json::parse(fs);
     testData = data.get<std::vector<int>>();
     LOGV(data.size());
-    int profit = maxProfit(testData);
+    int profit = buySellMaxProfit(testData);
     fs.close();
     return 0;
 }

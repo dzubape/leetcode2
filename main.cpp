@@ -10,5 +10,9 @@ Logger LOG("leetcode.log", &std::cerr);
 
 int main()
 {
-    return TEST_CASE(nextPermutation);
+    // return TEST_CASE(nextPermutation);
+    LOG << "Current case: " << __CURRENT_TASK_NAME << '\n';
+    Solution solution;
+    solution.setTestInputFor(__CURRENT_TASK_NAME);
+    return solution.runTest(__CURRENT_TASK_NAME);
 }

@@ -27,8 +27,11 @@ set(SOURCES
     search-in-rotated-array.cpp
 )
 
+set(CURRENT_TASK_NAME next-permutation)
+set(CURRENT_TASK_METHOD nextPermutation)
+
 set(RESOURCES
-    add-problem.sh
+    problems.py
     test_input.json
     README.md
 )
@@ -38,4 +41,7 @@ add_executable(leetcode2 ${INCLUDES} ${SOURCES} ${RESOURCES})
 target_compile_definitions(leetcode2
     PRIVATE
     __SOLUTION_DEV=1
+    __CURRENT_TASK_METHOD=${CURRENT_TASK_METHOD}
+    __CURRENT_TASK_NAME="${CURRENT_TASK_NAME}"
+    __CURRENT_TASK_TEST=test_${CURRENT_TASK_METHOD}
 )

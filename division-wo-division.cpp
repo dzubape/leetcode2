@@ -4,15 +4,16 @@
 #define LOGGER_NAME LOG
 #include "Solution.hpp"
 #else
+#define divisionWoDivision divide
 #define LOGV(VALUE) ()
 class Solution {
 public:
-    int divide(int, int);
+    int divisionWoDivision(int, int);
 
 };
 #endif
 
-int Solution::test_divide() {
+int Solution::test_divisionWoDivision() {
 
     const int MIN_INT = -1000;
     const int MAX_INT = 1000;
@@ -32,10 +33,10 @@ int Solution::test_divide() {
                 continue;
 
             LOGV(i/j);
-            LOGV(Solution().divide(i, j));
-            LOGV(i/j == Solution().divide(i, j));
+            LOGV(Solution().divisionWoDivision(i, j));
+            LOGV(i/j == Solution().divisionWoDivision(i, j));
 
-            if(i/j != Solution().divide(i, j))
+            if(i/j != Solution().divisionWoDivision(i, j))
                 return -1;
         }
     }
@@ -43,7 +44,7 @@ int Solution::test_divide() {
     return 0;
 }
 
-int Solution::divide(int dividend, int divisor) {
+int Solution::divisionWoDivision(int dividend, int divisor) {
 
     constexpr const int _INT_MIN = -(1L<<31);
     constexpr const int _INT_MAX = (1L<<31) - 1;
