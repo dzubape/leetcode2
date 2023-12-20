@@ -4,6 +4,7 @@
 json getTestInput(const std::string& filepath) {
 
     ifstream ifs(filepath);
+    LOG << "is open: " << ifs.is_open();
     auto data = json::parse(ifs);
     // LOGV(data);
     return data;
