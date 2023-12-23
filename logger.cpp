@@ -2,6 +2,7 @@
 
 #include <iostream>
 
+// /dev/null logging
 class DeadLog {
 public:
     template<typename T>
@@ -64,8 +65,16 @@ Logger::LogTrail::~LogTrail() {
     if(!*m_counterPtr) {
 
         delete m_counterPtr;
-        (*m_loggerPtr->m_outputPtr) << "\n";
+        (*m_loggerPtr->m_outputPtr) << ENDL;
         if(m_loggerPtr->m_stdOutputPtr)
-            (*m_loggerPtr->m_stdOutputPtr) << "\n";
+            (*m_loggerPtr->m_stdOutputPtr) << ENDL;
     }
+}
+
+Logger& Logger::operator~() {
+    (*m_outputPtr) << ENDL;
+    if(m_stdOutputPtr)
+        (*m_stdOutputPtr) << ENDL;
+
+    return *this;
 }

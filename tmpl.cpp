@@ -1,3 +1,5 @@
+/// task link: TASK_LINK
+
 #ifdef __SOLUTION_DEV
 #define LOGGER_NAME LOG
 #include "Solution.hpp"

@@ -1,5 +1,10 @@
 {
     "cmake.configureOnOpen": true,
+    "cmake.debugConfig": {
+        "args": [
+            "next-permutation"
+        ]
+    },
     "files.associations": {
         "array": "cpp",
         "atomic": "cpp",

@@ -7,6 +7,7 @@
 #include <map>
 #include <iostream>
 
+// LOGGER_NAME should be an external definition
 #define LOGV(VALUE) LOGGER_NAME << # VALUE ": " << (VALUE)
 
 class Logger;
@@ -42,6 +43,8 @@ public:
     Logger(const std::string& filepath, std::ostream* = nullptr);
 
     ~Logger();
+
+    Logger& operator~();
 
     template<typename T>
     LogTrail operator<<(const T& value) {

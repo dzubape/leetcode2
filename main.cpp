@@ -8,11 +8,22 @@ using namespace std;
 #define LOGGER_NAME LOG
 Logger LOG("leetcode.log", &std::cerr);
 
-int main()
+void printHelp() {
+    LOG << "./leetcode2 'task-name' ['custom-test-input.json']";
+}
+
+int main(int argc, char *argv[])
 {
-    // return TEST_CASE(nextPermutation);
-    LOG << "Current case: " << __CURRENT_TASK_NAME << '\n';
+    if(argc < 2) {
+        LOG << "Error: no argument passed";
+        printHelp();
+        exit(1);
+    }
+    auto taskName = argv[1];
+    
+    LOG << "Task name: " << taskName;
+    ~LOG;
     Solution solution;
-    solution.setTestInputFor(__CURRENT_TASK_NAME);
-    return solution.runTest(__CURRENT_TASK_NAME);
+    solution.setTestInputFor(taskName);
+    return solution.runTest(taskName);
 }

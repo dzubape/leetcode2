@@ -5,6 +5,8 @@ import sys
 import shutil
 import argparse
 import re
+from pathlib import Path
+import json
 
 def splitToWords(value):
     if tuple == type(value) or list == type(value):
@@ -58,7 +60,8 @@ def parse_signature(value):
 def add_problem(args):
     parser = argparse.ArgumentParser()
     parser.add_argument('-s', '--signature', required=True)
-    parser.add_argument('-t','--task', required=False, nargs='+')
+    parser.add_argument('-t', '--task', required=False, nargs='+')
+    parser.add_argument('-l', '--link', help='Web-reference to the target')
     
     opts = parser.parse_args(args)
     # print(f'{opts = }')
@@ -106,6 +109,7 @@ def add_problem(args):
     tmpFileName = f'{taskDashed}.cpp'
     with open('tmpl.cpp', 'r') as fp_src, open(tmpFileName, 'w') as fp_dst:
         for line in fp_src.readlines():
+            line = line.replace('TASK_LINK', opts.link if opts.link else 'none')
             line = line.replace('LEETCODE_METHOD_NAME', signature['name'])
             line = line.replace('METHOD_NAME', methodName)
             line = line.replace('METHOD_RETURN', methodReturn)
@@ -132,9 +136,32 @@ def add_problem(args):
     except:
         os.remove(tmpFileName)
 
+    gitAddFiles = [
+        'CMakeLists.txt',
+        'Solution.hpp',
+        f'{taskDashed}.cpp',
+    ]
+
+    settingsFilepath = Path() / '.vscode' / 'settings.json'
+    gitAddFiles.push(settingsFilepath)
+    with open(settingsFilepath, 'r+t') as fp:
+        settings = json.load(fp)
+        settings.setdefault('cmake.debugConfig', {}).setdefault('args', [])[0] = taskDashed
+        fp.truncate(0)
+        json.dump(settings, fp)
+
+    testInputFilepath = Path() / 'test-input' / f'{taskDashed}.json'
+    gitAddFiles.push(testInputFilepath)
+    with open(testInputFilepath) as fp:
+        fp.write('"not defined"')
+
     os.system(f'git checkout -b {taskDashed}')
-    os.system(f'git add {taskDashed}.cpp CMakeLists.txt Solution.hpp')
-    os.system(f'git commit --amend -m "{taskDashed} initial"')
+    os.system(f'git add {" ".join(gitAddFiles)}')
+
+    commitMessage = f'task: {taskDashed}, initial'
+    if opts.link:
+        commitMessage += f'\nlink: {opts.link}'
+    os.system(f'git commit -m "{commitMessage}"')
         
 
 if __name__ == '__main__':
