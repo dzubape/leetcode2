@@ -143,20 +143,20 @@ def add_problem(args):
     ]
 
     settingsFilepath = Path() / '.vscode' / 'settings.json'
-    gitAddFiles.push(settingsFilepath)
-    with open(settingsFilepath, 'r+t') as fp:
+    gitAddFiles.append(settingsFilepath)
+    with open(settingsFilepath, 'r') as fp:
         settings = json.load(fp)
-        settings.setdefault('cmake.debugConfig', {}).setdefault('args', [])[0] = taskDashed
-        fp.truncate(0)
-        json.dump(settings, fp)
+    settings.setdefault('cmake.debugConfig', {}).setdefault('args', [])[0] = taskDashed
+    with open(settingsFilepath, 'w') as fp:
+        json.dump(settings, fp, indent=4)
 
     testInputFilepath = Path() / 'test-input' / f'{taskDashed}.json'
-    gitAddFiles.push(testInputFilepath)
-    with open(testInputFilepath) as fp:
+    gitAddFiles.append(testInputFilepath)
+    with open(testInputFilepath, 'w') as fp:
         fp.write('"not defined"')
 
     os.system(f'git checkout -b {taskDashed}')
-    os.system(f'git add {" ".join(gitAddFiles)}')
+    os.system(f'git add {" ".join((str(f) for f in gitAddFiles))}')
 
     commitMessage = f'task: {taskDashed}, initial'
     if opts.link:
