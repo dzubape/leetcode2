@@ -155,7 +155,8 @@ def add_problem(args):
     with open(testInputFilepath, 'w') as fp:
         fp.write('"not defined"')
 
-    os.system(f'git checkout -b {taskDashed}')
+    branchName = f'task/{taskDashed}'
+    os.system(f'git checkout -b {branchName}')
     os.system(f'git add {" ".join((str(f) for f in gitAddFiles))}')
 
     commitMessage = f'task: {taskDashed}, initial'
