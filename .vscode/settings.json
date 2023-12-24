@@ -2,7 +2,7 @@
     "cmake.configureOnOpen": true,
     "cmake.debugConfig": {
         "args": [
-            "next-permutation"
+            "longest-valid-parentheses"
         ]
     },
     "files.associations": {

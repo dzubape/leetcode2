@@ -19,6 +19,7 @@ set(SOURCES
     logger.cpp
     Solution.cpp
     tmpl.cpp
+    longest-valid-parentheses.cpp
     next-permutation.cpp
     sliding-window-max.cpp
     search-in-matrix.cpp
