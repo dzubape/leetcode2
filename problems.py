@@ -108,30 +108,6 @@ def add_problem(args):
 
     gitAddFiles = []
 
-    try:
-        tmpFileName = 'new.CMakeLists.txt'
-        with open('CMakeLists.txt', 'r+') as fp_src, open(tmpFileName, 'w') as fp_dst:
-            insertLine = f'{taskDashed}.cpp'
-            for line in fp_src.readlines():
-                if line.find(insertLine) >= 0:
-                    print(f'>>{insertLine}<< is already in CMakeLists.txt')
-                    raise int
-
-            fp_src.seek(0)
-            for line in fp_src.readlines():
-                # print(f'{line = }')
-                # print(line, end='')
-                fp_dst.write(line)
-                if line.find("tmpl.cpp") < 0:
-                    continue
-                line = line.replace('tmpl.cpp', insertLine)
-                fp_dst.write(line)
-                # print(line, end='')
-        os.rename(tmpFileName, 'CMakeLists.txt')
-    except:
-        os.remove(tmpFileName)
-    gitAddFiles.append('CMakeLists.txt')
-
     tasksDir = Path() / 'tasks'
     taskFilePath = tasksDir / f'{taskDashed}.cpp'
     with open(tasksDir / 'tmpl.cpp', 'r') as fp_src, open(taskFilePath, 'w') as fp_dst:
