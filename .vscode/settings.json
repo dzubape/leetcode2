@@ -3,7 +3,7 @@
     "cmake.debugConfig": {
         "cwd": "${workspaceFolder}",
         "args": [
-            "longest-valid-parentheses"
+            "find-first-and-last-position-of-element-in-sorted-array"
         ]
     },
     "cmake.saveBeforeBuild": true,

@@ -72,6 +72,7 @@ public:
     }
 #endif
     // CASES //
+    ADD_CASE(findFirstAndLastPositionOfElementInSortedArray, ESCAPE_COMMAS(vector<int>), vector<int>& nums, int target);
     ADD_CASE(longestValidParentheses, ESCAPE_COMMAS(int), string s);
     ADD_CASE(nextPermutation, ESCAPE_COMMAS(void), vector<int>& nums);
     ADD_CASE(slidingWindowMax, ESCAPE_COMMAS(vector<int>), vector<int>& nums, int k);

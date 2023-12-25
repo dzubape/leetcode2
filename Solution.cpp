@@ -74,6 +74,7 @@ int Solution::runTest(const std::string &taskName, const std::string testInputFi
     ADD_SWITCH_CASE("division-wo-division", divisionWoDivision);
     ADD_SWITCH_CASE("buy-sell-max-profit", buySellMaxProfit);
     ADD_SWITCH_CASE("longest-valid-parentheses", longestValidParentheses);
+    ADD_SWITCH_CASE("find-first-and-last-position-of-element-in-sorted-array", findFirstAndLastPositionOfElementInSortedArray);
     //<< ADD_SWITCH_CASE
     else
         throw new exception;

@@ -19,6 +19,7 @@ set(SOURCES
     logger.cpp
     Solution.cpp
     tmpl.cpp
+    find-first-and-last-position-of-element-in-sorted-array.cpp
     longest-valid-parentheses.cpp
     next-permutation.cpp
     sliding-window-max.cpp
