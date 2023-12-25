@@ -21,15 +21,15 @@ int Solution::longestValidParentheses(string s) {
     std::stack<length_t> tracker;
     length_t validStart = -1;
     length_t maxLength = 0;
+    length_t validLength = 0;
     for(length_t i=0; i<s.length(); ++i) {
-        auto c = s[i];
-        if('(' == c) {
+        if('(' == s[i]) {
             if(validStart < 0)
                 validStart = i;
             tracker.push(i);
         }
-        else /*if(')' == c)*/ {
-            length_t validLength = 0;
+        else {
+            validLength = 0;
             // invalid input
             if(tracker.empty()) {
                 if(validStart >= 0) {
@@ -63,8 +63,9 @@ int Solution::longestValidParentheses(string s) {
 #ifdef __SOLUTION_DEV
 int Solution::test_longestValidParentheses() {
 
+    bool globalOk = true;
+
     for(size_t i=0; i<m_testInputData.size(); ++i) {
-        LOG << "===============";
         LOGV(i);
         auto jsonCaseInput = m_testInputData[i];
         std::string str;
@@ -81,8 +82,11 @@ int Solution::test_longestValidParentheses() {
         int resp = longestValidParentheses(str);
         LOGV(resp);
         bool ok = resp == answer;
-        LOG << (ok ? "SUCCEED" : "FAILED");
+        LOG << "local " << (ok ? "SUCCEED" : "FAILED");
+        globalOk = globalOk && ok;
+        LOG << "===============";
     }
+    LOG << "global: " << (globalOk ? "SUCCEED" : "FAILED");
 
     return 0;
 }
