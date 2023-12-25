@@ -21,6 +21,21 @@ int Solution::longestValidParentheses(string s) {
 #ifdef __SOLUTION_DEV
 int Solution::test_longestValidParentheses() {
 
+    for(auto jsonCaseInput : m_testInputData) {
+        LOG << "===============";
+        std::string str;
+        int answer;
+        jsonCaseInput[0].get_to(str);
+        jsonCaseInput[1].get_to(answer);
+        LOGV(str);
+        LOGV(answer);
+
+        int resp = longestValidParentheses(str);
+        LOGV(resp);
+        bool ok = resp == answer;
+        LOG << (ok ? "SUCCEED" : "FAILED");
+    }
+
     return 0;
 }
 #endif
