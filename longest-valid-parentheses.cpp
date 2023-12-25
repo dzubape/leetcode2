@@ -57,22 +57,6 @@ int Solution::longestValidParentheses(string s) {
         }
     }
 
-    // if(validStart >= 0) {
-    //     if(tracker.empty()) {
-    //         length_t validLength = s.size() - validStart;
-    //         if(validLength > maxLength) {
-    //             maxLength = validLength;
-    //         }
-    //     }
-    //     else {
-    //         length_t validLength = s.size() - tracker.top() - 1;
-    //         if(validLength > maxLength) {
-    //             maxLength = validLength;
-    //         }
-    //     }
-    // }
-    // ")(((((()())()()))()(()))("
-
     return maxLength;
 }
 
