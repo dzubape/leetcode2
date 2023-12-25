@@ -14,8 +14,8 @@ public:
 #endif
 
 vector<int> Solution::findFirstAndLastPositionOfElementInSortedArray(vector<int>& nums, int target) {
-
-    return 0;
+    vector<int> result;
+    return result;
 }
 
 #ifdef __SOLUTION_DEV
