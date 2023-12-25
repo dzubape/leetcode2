@@ -7,6 +7,7 @@ import argparse
 import re
 from pathlib import Path
 import json
+import tempfile
 
 def splitToWords(value):
     if tuple == type(value) or list == type(value):
@@ -55,6 +56,28 @@ def parse_signature(value):
         'return': METHOD_RETURN,
         'params': METHOD_PARAMS,
     }
+
+def inject(
+    filepath,
+    replacement: str,
+    substr: str=None,
+    pattern: str=None,
+):
+    assert substr or pattern, 'One of substr or pattern should be provided, both empty is passed'
+
+    with tempfile.NamedTemporaryFile('w+') as fp_tmp:
+        with open(filepath, 'r') as fp_src:
+            for line in fp_src.readlines():
+                if substr:
+                    line.replace(substr, replacement)
+                elif pattern:
+                    line = re.sub(pattern, replacement, line)
+                fp_tmp.write(line)
+        with open(filepath, 'w') as fp_dst:
+            fp_tmp.flush()
+            fp_tmp.seek(0)
+            fp_dst.write(fp_tmp.read())
+    return
 
 
 def add_problem(args):
@@ -142,18 +165,28 @@ def add_problem(args):
         f'{taskDashed}.cpp',
     ]
 
+    solutionSrcFile = 'Solution.cpp'
+    gitAddFiles.append(solutionSrcFile)
+    inject(
+        solutionSrcFile,
+        pattern='^((\s+)//<< ADD_SWITCH_CASE)',
+        replacement=rf'\2ADD_SWITCH_CASE("{taskDashed}", {methodName});\n\1',
+    )
+
     settingsFilepath = Path() / '.vscode' / 'settings.json'
     gitAddFiles.append(settingsFilepath)
     with open(settingsFilepath, 'r') as fp:
         settings = json.load(fp)
-    settings.setdefault('cmake.debugConfig', {}).setdefault('args', [])[0] = taskDashed
+    settingsDebugConfig = settings.setdefault('cmake.debugConfig', {})
+    settingsDebugConfig.setdefault('args', [])[0] = taskDashed
+    settingsDebugConfig["cwd"] = r'${workspaceFolder}'
     with open(settingsFilepath, 'w') as fp:
         json.dump(settings, fp, indent=4)
 
     testInputFilepath = Path() / 'test-input' / f'{taskDashed}.json'
     gitAddFiles.append(testInputFilepath)
     with open(testInputFilepath, 'w') as fp:
-        fp.write('"not defined"')
+        fp.write('["not defined"]')
 
     branchName = f'task/{taskDashed}'
     os.system(f'git checkout -b {branchName}')

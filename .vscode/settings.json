@@ -1,10 +1,13 @@
 {
     "cmake.configureOnOpen": true,
     "cmake.debugConfig": {
+        "cwd": "${workspaceFolder}",
         "args": [
             "longest-valid-parentheses"
         ]
     },
+    "cmake.saveBeforeBuild": true,
+    "cmake.launchBehavior": "breakAndReuseTerminal",
     "files.associations": {
         "array": "cpp",
         "atomic": "cpp",
