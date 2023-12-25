@@ -106,6 +106,8 @@ def add_problem(args):
     print(f'{taskInWords = }')
     print(f'{taskDashed = }')
 
+    gitAddFiles = []
+
     try:
         tmpFileName = 'new.CMakeLists.txt'
         with open('CMakeLists.txt', 'r+') as fp_src, open(tmpFileName, 'w') as fp_dst:
@@ -128,9 +130,11 @@ def add_problem(args):
         os.rename(tmpFileName, 'CMakeLists.txt')
     except:
         os.remove(tmpFileName)
+    gitAddFiles.append('CMakeLists.txt')
 
-    tmpFileName = f'{taskDashed}.cpp'
-    with open('tmpl.cpp', 'r') as fp_src, open(tmpFileName, 'w') as fp_dst:
+    tasksDir = Path() / 'tasks'
+    taskFilePath = tasksDir / f'{taskDashed}.cpp'
+    with open(tasksDir / 'tmpl.cpp', 'r') as fp_src, open(taskFilePath, 'w') as fp_dst:
         for line in fp_src.readlines():
             line = line.replace('TASK_LINK', opts.link if opts.link else 'none')
             line = line.replace('LEETCODE_METHOD_NAME', signature['name'])
@@ -138,6 +142,7 @@ def add_problem(args):
             line = line.replace('METHOD_RETURN', methodReturn)
             line = line.replace('METHOD_PARAMS', methodParams)
             fp_dst.write(line)
+    gitAddFiles.append(taskFilePath)
 
     try:
         tmpFileName = 'new.Solution.hpp'
@@ -158,23 +163,17 @@ def add_problem(args):
         os.rename(tmpFileName, 'Solution.hpp')
     except:
         os.remove(tmpFileName)
-
-    gitAddFiles = [
-        'CMakeLists.txt',
-        'Solution.hpp',
-        f'{taskDashed}.cpp',
-    ]
+    gitAddFiles.append('Solution.hpp')
 
     solutionSrcFile = 'Solution.cpp'
-    gitAddFiles.append(solutionSrcFile)
     inject(
         solutionSrcFile,
         pattern='^((\s+)//<< ADD_SWITCH_CASE)',
         replacement=rf'\2ADD_SWITCH_CASE("{taskDashed}", {methodName});\n\1',
     )
+    gitAddFiles.append(solutionSrcFile)
 
     settingsFilepath = Path() / '.vscode' / 'settings.json'
-    gitAddFiles.append(settingsFilepath)
     with open(settingsFilepath, 'r') as fp:
         settings = json.load(fp)
     settingsDebugConfig = settings.setdefault('cmake.debugConfig', {})
@@ -182,11 +181,12 @@ def add_problem(args):
     settingsDebugConfig["cwd"] = r'${workspaceFolder}'
     with open(settingsFilepath, 'w') as fp:
         json.dump(settings, fp, indent=4)
+    gitAddFiles.append(settingsFilepath)
 
     testInputFilepath = Path() / 'test-input' / f'{taskDashed}.json'
-    gitAddFiles.append(testInputFilepath)
     with open(testInputFilepath, 'w') as fp:
         fp.write('["not defined"]')
+    gitAddFiles.append(testInputFilepath)
 
     branchName = f'task/{taskDashed}'
     os.system(f'git checkout -b {branchName}')
