@@ -1,7 +1,25 @@
 #define LOGGER_NAME LOG
 #include "Solution.hpp"
 
+#include <sys/stat.h>
+#include <unistd.h>
+bool fileExists(const std::string& filepath) {
+    char cwd[256];
+    getcwd(cwd, 256);
+    LOGV(cwd);
+
+    struct stat st;
+    if(stat(filepath.data(), &st)) {
+        LOG << "stat for " << filepath << " failed";
+    }
+    else {
+        LOGV(st.st_size);
+    }
+    return true;
+}
+
 json getTestInput(const std::string& filepath) {
+    fileExists(filepath);
     ifstream ifs(filepath);
     auto data = json::parse(ifs);
     return data;
@@ -55,6 +73,8 @@ int Solution::runTest(const std::string &taskName, const std::string testInputFi
     ADD_SWITCH_CASE("next-permutation", nextPermutation);
     ADD_SWITCH_CASE("division-wo-division", divisionWoDivision);
     ADD_SWITCH_CASE("buy-sell-max-profit", buySellMaxProfit);
+    ADD_SWITCH_CASE("longest-valid-parentheses", longestValidParentheses);
+    //<< ADD_SWITCH_CASE
     else
         throw new exception;
 }

@@ -2,7 +2,7 @@
     "externalConsole": true,
     "request": "launch",
     "program": "./build/leetcode2",
-    "cwd": ".",
+    "cwd": "${workspaceFolder}",
     "type": "cppdbg",
     "linux": {
         "MIMode": "gdb",

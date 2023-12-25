@@ -21,6 +21,10 @@ METHOD_RETURN Solution::METHOD_NAME(METHOD_PARAMS) {
 #ifdef __SOLUTION_DEV
 int Solution::test_METHOD_NAME() {
 
+    for(auto jsonCaseInput : m_testInputData) {
+
+    }
+
     return 0;
 }
 #endif
