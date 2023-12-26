@@ -48,11 +48,10 @@ Pos searchAnyValuePos(const std::vector<Value> &values, const Value& searchValue
         return left;
     if(values[right] == searchValue)
         return right;
-    while(left<right) {
+    while(right-left>1) {
         Pos middle = (left + right) >> 1;
         if(values[middle] == searchValue)
             return middle;
-        // *(values[middle] < searchValue ? &left : &right) = middle;
         if(values[middle] < searchValue)
             left = middle;
         else
@@ -138,13 +137,15 @@ vector<int> Solution::findFirstAndLastPositionOfElementInSortedArray(vector<int>
 #ifdef __SOLUTION_DEV
 int Solution::test_findFirstAndLastPositionOfElementInSortedArray() {
 #if 1
-#define Q_MAX_VALUE value_t(10e9)
-#define Q_MAX_COUNT length_t(1e5)
-#define Q_MIN_COUNT length_t(1e3)
+#define Q_MAX_VALUE value_t(10e2)
+#define Q_MAX_COUNT length_t(1e3)
+#define Q_MIN_COUNT length_t(1e2)
     std::srand(std::time(nullptr));
+    uint32_t durationAccum = 0;
+    const uint32_t caseCount = 1000;
     bool globalOk = true;
 #define isGlobalOk(predicate) globalOk = globalOk && (predicate)
-    for(int q=0; q<10; ++q) {
+    for(int q=0; q<caseCount; ++q) {
         int size = std::rand() % (Q_MAX_COUNT - Q_MIN_COUNT) + Q_MIN_COUNT;
         std::vector<value_t> values(size);
         for(length_t i=0; i<size; ++i) {
@@ -162,6 +163,7 @@ int Solution::test_findFirstAndLastPositionOfElementInSortedArray() {
             values,
             searchValue
         );
+        durationAccum += duration();
         LOGV(searchValue);
         LOGV(range);
         length_t start = range[0];
@@ -197,6 +199,7 @@ int Solution::test_findFirstAndLastPositionOfElementInSortedArray() {
     }
     LOG << (globalOk ? "Total SUCCESS!" : "Total FAIL!");
     LOG << "++++++++++++++++";
+    LOG << "average duration: " << durationAccum / caseCount << "mics";
     return 0;
 #elif 1
 

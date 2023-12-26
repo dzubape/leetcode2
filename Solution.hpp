@@ -70,6 +70,7 @@ public:
         printDuration();
         return result;
     }
+    inline uint32_t duration() { return m_duration.value; }
 #endif
     // CASES //
     ADD_CASE(findFirstAndLastPositionOfElementInSortedArray, ESCAPE_COMMAS(vector<int>), vector<int>& nums, int target);
