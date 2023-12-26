@@ -16,7 +16,7 @@ public:
 typedef int value_t;
 typedef int length_t;
 
-template<typename Value, typename Pos=size_t>
+template<typename Value, typename Pos=ssize_t>
 Pos searchAnyValuePos(const std::vector<Value> &values, const Value& searchValue, Pos left=0, Pos right=-1) {
     if(values.empty())
         return -1;
@@ -39,7 +39,7 @@ Pos searchAnyValuePos(const std::vector<Value> &values, const Value& searchValue
     return -1;
 }
 
-template<typename Value, typename Pos=size_t>
+template<typename Value, typename Pos=ssize_t>
 Pos searchLeftValuePos(const std::vector<Value> &values, const Value& searchValue, Pos left=0, Pos right=-1) {
     if(values.empty())
         return -1;
@@ -61,7 +61,7 @@ Pos searchLeftValuePos(const std::vector<Value> &values, const Value& searchValu
     return -1;
 }
 
-template<typename Value, typename Pos=size_t>
+template<typename Value, typename Pos=ssize_t>
 Pos searchRightValuePos(const std::vector<Value> &values, const Value& searchValue, Pos left=0, Pos right=-1) {
     if(values.empty())
         return -1;
@@ -100,6 +100,62 @@ vector<int> Solution::findFirstAndLastPositionOfElementInSortedArray(vector<int>
 
 #ifdef __SOLUTION_DEV
 int Solution::test_findFirstAndLastPositionOfElementInSortedArray() {
+#if 1
+#define Q_MAX_VALUE 10
+#define Q_MAX_COUNT 30
+#define Q_MIN_COUNT 1
+    std::srand(std::time(nullptr));
+    bool globalOk = true;
+#define isGlobalOk(predicate) globalOk = globalOk && (predicate)
+    for(int q=0; q<10; ++q) {
+        int size = std::rand() % (Q_MAX_COUNT - Q_MIN_COUNT) + Q_MIN_COUNT;
+        std::vector<value_t> values(size);
+        for(length_t i=0; i<size; ++i) {
+            values[i] = std::rand() % Q_MAX_VALUE;
+        }
+        std::sort(values.begin(), values.end());
+        length_t realSearchIdx = std::rand() % values.size();
+        LOGV(values);
+#if 1
+        value_t searchValue = values[realSearchIdx];
+        auto range = findFirstAndLastPositionOfElementInSortedArray(values, searchValue);
+        LOGV(searchValue);
+        LOGV(range);
+        length_t start = range[0];
+        length_t end = range[1];
+        LOGV(values[start]);
+        LOGV(values[end]);
+        LOG << "~~~~~~~~";
+        if(start)
+            LOGV(values[start-1]);
+        if(end+1<values.size())
+            LOGV(values[end+1]);
+
+        bool localOk = true;
+#define isLocalOk(predicate) localOk = localOk && (predicate)
+        isLocalOk(values[start] == searchValue);
+        isLocalOk(values[end] == searchValue);
+        if(start)
+            isLocalOk(values[start-1] < searchValue);
+        if(end < values.size()-1)
+            isLocalOk(values[end+1] > searchValue);
+        isGlobalOk(localOk);
+        LOG << (localOk ? "Local SUCCESS" : "Local FAIL"); 
+#elif 0
+        auto foundIdx = searchAnyValuePos(values, values[realSearchIdx]);
+        LOGV(size);
+        LOGV(realSearchIdx);
+        LOGV(foundIdx);
+        LOGV(values[realSearchIdx]);
+        LOGV(values[foundIdx]);
+        LOGV(values[foundIdx] == values[realSearchIdx] ? "YES" : "NO");
+#endif
+        LOG << "================";
+    }
+    LOG << (globalOk ? "Total SUCCESS!" : "Total FAIL!");
+    LOG << "++++++++++++++++";
+    return 0;
+#elif 1
 
     bool globalOk = true;
     for(size_t i=0; i<m_testInputData.size(); ++i) {
@@ -126,5 +182,6 @@ int Solution::test_findFirstAndLastPositionOfElementInSortedArray() {
     LOG << "> globalOk: " << (globalOk ? "SUCCEED" : "FAILED");
     LOG << "++++++++++++++++";
     return 0;
+#endif
 }
 #endif

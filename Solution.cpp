@@ -19,7 +19,7 @@ bool fileExists(const std::string& filepath) {
 }
 
 json getTestInput(const std::string& filepath) {
-    fileExists(filepath);
+    // fileExists(filepath);
     ifstream ifs(filepath);
     auto data = json::parse(ifs);
     return data;
