@@ -61,7 +61,7 @@ Pos searchAnyValuePos(const std::vector<Value> &values, const Value& searchValue
 }
 
 template<typename Value, typename Pos=length_t>
-Pos searchLeftValuePos(const std::vector<Value> &values, const Value& searchValue, Pos left=0, Pos right=-1) {
+inline Pos searchLeftValuePos(const std::vector<Value> &values, const Value& searchValue, Pos left=0, Pos right=-1) {
     if(values.empty())
         return -1;
     if(right=-1)
@@ -89,7 +89,7 @@ Pos searchLeftValuePos(const std::vector<Value> &values, const Value& searchValu
 }
 
 template<typename Value, typename Pos=length_t>
-Pos searchRightValuePos(const std::vector<Value> &values, const Value& searchValue, Pos left=0, Pos right=-1) {
+inline Pos searchRightValuePos(const std::vector<Value> &values, const Value& searchValue, Pos left=0, Pos right=-1) {
     if(values.empty())
         return -1;
     if(right=-1)
@@ -117,10 +117,48 @@ Pos searchRightValuePos(const std::vector<Value> &values, const Value& searchVal
 }
 
 
-vector<int> Solution::findFirstAndLastPositionOfElementInSortedArray(vector<int>& values, int target) {
+vector<int> Solution::findFirstAndLastPositionOfElementInSortedArray(vector<int>& values, int searchValue) {
+#if 1
+    if(values.empty())
+        return {-1, -1};
+    
+    length_t left = 0;
+    length_t right = values.size()-1;
+    length_t middle = -1;
+
+    do {
+        if(values[left] == searchValue) {
+            middle = left;
+            break;
+        }
+
+        if(values[right] == searchValue) {
+            middle = right;
+            break;
+        }
+
+        while(right-left>1) {
+            middle = (left + right) >> 1;
+            if(values[middle] == searchValue)
+                break;
+            if(values[middle] < searchValue)
+                left = middle;
+            else
+                right = middle;
+        }
+    } while(false);
+
+    if(middle < 0)
+        return {-1, -1};
+
+    left = searchLeftValuePos(values, searchValue, left, middle);
+    right = searchRightValuePos(values, searchValue, middle, right);
+
+    return {left, right};
+#elif 1
     vector<length_t> result;
 
-    vector<length_t> leftCenterRight = searchAnyValuePosBetween(values, target);
+    vector<length_t> leftCenterRight = searchAnyValuePosBetween(values, searchValue);
     length_t left = leftCenterRight[0];
     length_t center = leftCenterRight[1];
     length_t right = leftCenterRight[2];
@@ -128,18 +166,19 @@ vector<int> Solution::findFirstAndLastPositionOfElementInSortedArray(vector<int>
     if(center < 0)
         return {-1, -1};
 
-    left = searchLeftValuePos(values, target, left, center);
-    right = searchRightValuePos(values, target, center, right);
+    left = searchLeftValuePos(values, searchValue, left, center);
+    right = searchRightValuePos(values, searchValue, center, right);
     
     return {left, right};
+#endif
 }
 
 #ifdef __SOLUTION_DEV
 int Solution::test_findFirstAndLastPositionOfElementInSortedArray() {
 #if 1
-#define Q_MAX_VALUE value_t(10e2)
-#define Q_MAX_COUNT length_t(1e3)
-#define Q_MIN_COUNT length_t(1e2)
+#define Q_MAX_VALUE value_t(1e1)
+#define Q_MAX_COUNT length_t(1e4)
+#define Q_MIN_COUNT length_t(1e4-1)
     std::srand(std::time(nullptr));
     uint32_t durationAccum = 0;
     const uint32_t caseCount = 1000;
