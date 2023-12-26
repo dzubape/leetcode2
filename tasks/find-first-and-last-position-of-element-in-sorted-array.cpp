@@ -26,7 +26,7 @@ std::vector<Pos> searchAnyValuePosBetween(const std::vector<Value> &values, cons
         return {left, left, right};
     if(values[right] == searchValue)
         return {left, right, right};
-    while(left<right) {
+    while(right-left>1) {
         Pos middle = (left + right) >> 1;
         if(values[middle] == searchValue)
             return {left, middle, right};
@@ -71,8 +71,14 @@ Pos searchLeftValuePos(const std::vector<Value> &values, const Value& searchValu
         return left;
     while(left+1<right) {
         Pos middle = (left + right) >> 1;
-        if(values[middle] >= searchValue)
+        if(values[middle] > searchValue)
             right = middle;
+        else if(values[middle] == searchValue) {
+            if(values[middle-1] < searchValue)
+                return middle;
+            else
+                right = middle-1;
+        }
         else
             left = middle;
     }
@@ -93,8 +99,14 @@ Pos searchRightValuePos(const std::vector<Value> &values, const Value& searchVal
         return right;
     while(left+1<right) {
         Pos middle = (left + right) >> 1;
-        if(values[middle] <= searchValue)
+        if(values[middle] < searchValue)
             left = middle;
+        else if(values[middle] == searchValue) {
+            if(values[middle+1] > searchValue)
+                return middle;
+            else
+                left = middle+1;
+        }
         else
             right = middle;
     }
@@ -126,9 +138,9 @@ vector<int> Solution::findFirstAndLastPositionOfElementInSortedArray(vector<int>
 #ifdef __SOLUTION_DEV
 int Solution::test_findFirstAndLastPositionOfElementInSortedArray() {
 #if 1
-#define Q_MAX_VALUE 10
-#define Q_MAX_COUNT 30
-#define Q_MIN_COUNT 1
+#define Q_MAX_VALUE value_t(10e9)
+#define Q_MAX_COUNT length_t(1e5)
+#define Q_MIN_COUNT length_t(1e3)
     std::srand(std::time(nullptr));
     bool globalOk = true;
 #define isGlobalOk(predicate) globalOk = globalOk && (predicate)
@@ -140,10 +152,16 @@ int Solution::test_findFirstAndLastPositionOfElementInSortedArray() {
         }
         std::sort(values.begin(), values.end());
         length_t realSearchIdx = std::rand() % values.size();
-        LOGV(values);
+        // LOGV(values);
+        LOGV(size);
 #if 1
         value_t searchValue = values[realSearchIdx];
-        auto range = findFirstAndLastPositionOfElementInSortedArray(values, searchValue);
+        // auto range = findFirstAndLastPositionOfElementInSortedArray(values, searchValue);
+        auto range = timingRunner<std::vector<int>, std::vector<int>&, int>(
+            &Solution::findFirstAndLastPositionOfElementInSortedArray,
+            values,
+            searchValue
+        );
         LOGV(searchValue);
         LOGV(range);
         length_t start = range[0];
@@ -196,6 +214,7 @@ int Solution::test_findFirstAndLastPositionOfElementInSortedArray() {
         LOGV(realEnds);
 
         auto predEnds = findFirstAndLastPositionOfElementInSortedArray(values, searchValue);
+        LOGV(predEnds);
         bool localOk = predEnds == realEnds;
 
         ~LOG;
